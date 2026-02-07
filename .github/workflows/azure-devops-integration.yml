@@ -1,0 +1,65 @@
+name: Azure DevOps Integration
+
+# This workflow can be triggered manually to sync work items from Azure DevOps
+# and create corresponding issues or process them for automated PR creation
+on:
+  workflow_dispatch:
+    inputs:
+      work_item_id:
+        description: 'Azure DevOps Work Item ID (optional - leave empty to process all active items)'
+        required: false
+        type: string
+      action:
+        description: 'Action to perform'
+        required: true
+        type: choice
+        options:
+          - 'fetch-work-items'
+          - 'create-pr-from-work-item'
+          - 'link-pr-to-work-item'
+        default: 'fetch-work-items'
+
+jobs:
+  azure-devops-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies
+        run: |
+          npm install -g azure-devops-extension-api
+          npm install node-fetch@2
+
+      - name: Fetch Azure DevOps Work Items
+        if: inputs.action == 'fetch-work-items'
+        env:
+          AZURE_DEVOPS_ORG_URL: ${{ secrets.AZURE_DEVOPS_ORG_URL }}
+          AZURE_DEVOPS_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
+          AZURE_DEVOPS_PROJECT: ${{ secrets.AZURE_DEVOPS_PROJECT }}
+        run: node .github/scripts/fetch-work-items.js
+
+      - name: Create PR from Work Item
+        if: inputs.action == 'create-pr-from-work-item'
+        env:
+          AZURE_DEVOPS_ORG_URL: ${{ secrets.AZURE_DEVOPS_ORG_URL }}
+          AZURE_DEVOPS_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
+          AZURE_DEVOPS_PROJECT: ${{ secrets.AZURE_DEVOPS_PROJECT }}
+          WORK_ITEM_ID: ${{ inputs.work_item_id }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node .github/scripts/create-pr-from-work-item.js
+
+      - name: Link PR to Work Item
+        if: inputs.action == 'link-pr-to-work-item'
+        env:
+          AZURE_DEVOPS_ORG_URL: ${{ secrets.AZURE_DEVOPS_ORG_URL }}
+          AZURE_DEVOPS_PAT: ${{ secrets.AZURE_DEVOPS_PAT }}
+          AZURE_DEVOPS_PROJECT: ${{ secrets.AZURE_DEVOPS_PROJECT }}
+          WORK_ITEM_ID: ${{ inputs.work_item_id }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node .github/scripts/link-pr-to-work-item.js

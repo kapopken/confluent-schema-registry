@@ -39,6 +39,11 @@ run().catch(console.error)
 
 Learn more about using [KafkaJS Confluent Schema registry on the official site!](https://kafkajs.github.io/confluent-schema-registry/)
 
+## Development & CI/CD
+
+- [Azure DevOps Setup](docs/azure-devops-setup.md) - Connect your fork to Azure Pipelines
+- [Azure DevOps Integration](docs/azure-devops-integration.md) - Sync work items and automate PR creation
+
 ## License
 
 See [LICENSE](https://github.com/kafkajs/confluent-schema-registry/blob/master/LICENSE) for more details.
