@@ -140,6 +140,11 @@ The pipeline will automatically run on:
 - Review the test logs to identify the issue
 - Tests require Docker to be available on the build agent
 
+## Work Item Integration
+
+For integrating Azure DevOps work items with GitHub PRs and enabling AI-assisted development, see:
+- [Azure DevOps Integration Guide](./azure-devops-integration.md) - Sync work items and automate PR creation
+
 ## Additional Resources
 
 - [Azure Pipelines documentation](https://docs.microsoft.com/en-us/azure/devops/pipelines/)

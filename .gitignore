@@ -14,6 +14,9 @@ test-report.xml
 # Others
 #
 trash
+.env
+.env.local
+.env.*.local
 
 \.vscode/
 \.vs/
@@ -23,6 +26,7 @@ trash
 tmp
 dist
 release
+.github/work-items
 
 # website
 #
